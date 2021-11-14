@@ -16,6 +16,8 @@ class MainWindow : public QMainWindow {
     void play();
     void pause();
 
+    void dbusPropertiesChanged(const QString& name, const QVariantMap& properties, const QStringList&);
+
   private:
     QAction* quitAction;
 

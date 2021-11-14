@@ -1,6 +1,5 @@
 #include <unistd.h>
 
-#include <QtCore>
 #include <QtWidgets>
 #include <stdexcept>
 
@@ -45,6 +44,9 @@ int main(int argc, char** argv) {
     }
 
     QApplication app(argc, argv);
+
+    QTranslator translator;
+    if (translator.load(QLocale::system().name(), ":/translations")) app.installTranslator(&translator);
 
     MainWindow* main_window = new MainWindow();
 

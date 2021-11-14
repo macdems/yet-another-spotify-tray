@@ -13,13 +13,19 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 
-find_package(Qt5 COMPONENTS Widgets DBus REQUIRED)
+find_package(Qt5 COMPONENTS Widgets DBus LinguistTools REQUIRED)
 find_package(X11 REQUIRED)
+
+qt5_add_translation(translations pl_PL.ts)
+file(COPY l10n.qrc DESTINATION ${CMAKE_BINARY_DIR}/)
+qt5_add_resources(resources ${CMAKE_BINARY_DIR}/l10n.qrc)
 
 add_executable(spotify-tray
     main.cpp
     mainwindow.cpp
     winctl.cpp
+    ${translations}
+    ${resources}
 )
 
 target_link_libraries(spotify-tray Qt5::Widgets Qt5::DBus ${X11_LIBRARIES})
