@@ -52,6 +52,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
             } else {
                 show();
                 raise();
+                activateWindow();
             }
             break;
         case QSystemTrayIcon::MiddleClick: break;
