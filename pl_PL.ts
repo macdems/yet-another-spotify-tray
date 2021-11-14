@@ -37,13 +37,13 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="120"/>
-        <source>Spotify (%1 - %2)</source>
-        <translation>Spotify (%1 - %2)</translation>
+        <source>Spotify - %1 - %2</source>
+        <translation>Spotify - %1 - %2</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="122"/>
-        <source>Spotify (%1)</source>
-        <translation>Spotify (%1)</translation>
+        <source>Spotify - %1</source>
+        <translation>Spotify - %1</translation>
     </message>
 </context>
 </TS>

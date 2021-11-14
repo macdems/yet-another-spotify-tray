@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-project(yet-another-spotify-tray VERSION 1.0.0 LANGUAGES CXX)
+project(yet-another-spotify-tray VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -18,14 +18,13 @@ find_package(X11 REQUIRED)
 
 qt5_add_translation(translations pl_PL.ts)
 file(COPY l10n.qrc DESTINATION ${CMAKE_BINARY_DIR}/)
-qt5_add_resources(resources ${CMAKE_BINARY_DIR}/l10n.qrc)
 
 add_executable(spotify-tray
     main.cpp
     mainwindow.cpp
     winctl.cpp
+    ${CMAKE_BINARY_DIR}/l10n.qrc
     ${translations}
-    ${resources}
 )
 
 target_link_libraries(spotify-tray Qt5::Widgets Qt5::DBus ${X11_LIBRARIES})

@@ -71,11 +71,11 @@ WindowData getSpotifyWindow() {
 
     display = XOpenDisplay(nullptr);
 
-    /* List all the windows the window manager knows abouti. */
+    // List all the windows the window manager knows about.
     win_list_prop = getXAtom(display, "_NET_CLIENT_LIST");
     win_list = (Window*)getXProperty(display, DefaultRootWindow(display), win_list_prop, XA_WINDOW, &length);
-    /* Try to find the one with the WM_CLASS property corresponding
-     * to the Spotify client. */
+    // Try to find the one with the WM_CLASS property corresponding
+    // to the Spotify client.
     for (i = 0; i < length; i++) {
         if (isSpotifyWindow(display, win_list[i])) {
             result.wid = win_list[i];

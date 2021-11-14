@@ -22,7 +22,7 @@ WindowData startSpotify(const QStringList& args) {
 
     // App launched, it double forks; need to find the window and PID
     for (int i = 0; i < CLIENT_FIND_ATTEMPTS; i++) {
-        /* Spotify takes time to start up, so wait a while. */
+        // Spotify takes time to start up, so wait a while.
         usleep(5e5);  // 0.5 sec
         if (WindowData found = getSpotifyWindow()) {
             return found;

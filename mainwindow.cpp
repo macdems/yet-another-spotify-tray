@@ -117,9 +117,9 @@ void MainWindow::dbusPropertiesChanged(const QString& name, const QVariantMap& p
 
             if (!title.isEmpty()) {
                 if (!artist.isEmpty())
-                    trayIcon->setToolTip(tr("Spotify (%1 - %2)").arg(title).arg(artist));
+                    trayIcon->setToolTip(tr("Spotify - %1 - %2").arg(title).arg(artist));
                 else
-                    trayIcon->setToolTip(tr("Spotify (%1)").arg(title));
+                    trayIcon->setToolTip(tr("Spotify - %1").arg(title));
             } else {
                 trayIcon->setToolTip(tr("Spotify"));
             }
