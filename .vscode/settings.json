@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.xpl": "plask",
-        "*.wsgi": "python",
-        "exception": "cpp",
-        "stdexcept": "cpp"
-    }
-}
