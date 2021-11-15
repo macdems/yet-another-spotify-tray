@@ -1,7 +1,7 @@
 # Yet Another Spotify Tray
 
 This application should not exist. Spotify should have this feature automatically.
-This application  adds a tray icon to the Spotify Linux client application.
+This application adds a tray icon to the Spotify Linux client application.
 
 ## Features
 
@@ -31,6 +31,7 @@ This application  adds a tray icon to the Spotify Linux client application.
 ## Dependencies
 
 * Qt5
+* Xlib
 * CMake
 
 ## Disclaimer
