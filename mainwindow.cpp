@@ -11,7 +11,9 @@ MainWindow::MainWindow()
            QDBusConnection::sessionBus()) {
     setWindowTitle(tr("Spotify"));
 
-    trayIcon = new QSystemTrayIcon(QIcon::fromTheme("spotify", QIcon("/usr/share/pixmaps/spotify-client.png")), this);
+    setWindowIcon(QIcon(":/icons/spotify-client.png"));
+
+    trayIcon = new QSystemTrayIcon(QIcon(":/icons/spotify-intray.png"), this);
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
 
     quitAction = new QAction(QIcon::fromTheme("application-exit"), tr("&Quit Spotify"), this);

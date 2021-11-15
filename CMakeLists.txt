@@ -23,6 +23,7 @@ add_executable(spotify-tray
     main.cpp
     mainwindow.cpp
     winctl.cpp
+    icons.qrc
     ${CMAKE_BINARY_DIR}/l10n.qrc
     ${translations}
 )
@@ -31,3 +32,4 @@ target_link_libraries(spotify-tray Qt5::Widgets Qt5::DBus ${X11_LIBRARIES})
 
 install(TARGETS spotify-tray DESTINATION bin)
 install(FILES spotify-tray.desktop DESTINATION share/applications)
+install(FILES spotify-tray.svg DESTINATION share/icons/hicolor/scalable/apps)
