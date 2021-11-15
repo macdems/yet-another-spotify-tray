@@ -1,15 +1,21 @@
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Name=Spotify
-Name[pl_PL]=Spotify
-GenericName=Music Player in system tray
+Comment[pl_PL]=
+Comment=
+Exec=spotify-tray
 GenericName[pl_PL]=Odtwarzacz muzyki w tacce systemowej
+GenericName=Odtwarzacz muzyki w tacce systemowej
 Icon=spotify-tray
-Exec=spotify-tray %%U
-Type=Application
 MimeType=
+Name[pl_PL]=Spotify
+Name=Spotify
 NoDisplay=false
 Path=
 StartupNotify=false
 Terminal=false
 TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
