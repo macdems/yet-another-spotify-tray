@@ -16,14 +16,14 @@ endif()
 find_package(Qt5 COMPONENTS Widgets DBus LinguistTools REQUIRED)
 find_package(X11 REQUIRED)
 
-qt5_add_translation(translations pl_PL.ts)
-file(COPY l10n.qrc DESTINATION ${CMAKE_BINARY_DIR}/)
+qt5_add_translation(translations l10n/pl_PL.ts)
+file(COPY res/l10n.qrc DESTINATION ${CMAKE_BINARY_DIR}/)
 
 add_executable(spotify-tray
-    main.cpp
-    mainwindow.cpp
-    winctl.cpp
-    icons.qrc
+    src/main.cpp
+    src/mainwindow.cpp
+    src/winctl.cpp
+    res/icons.qrc
     ${CMAKE_BINARY_DIR}/l10n.qrc
     ${translations}
 )
@@ -31,5 +31,5 @@ add_executable(spotify-tray
 target_link_libraries(spotify-tray Qt5::Widgets Qt5::DBus ${X11_LIBRARIES})
 
 install(TARGETS spotify-tray DESTINATION bin)
-install(FILES spotify-tray.desktop DESTINATION share/applications)
-install(FILES spotify-tray.svg DESTINATION share/icons/hicolor/scalable/apps)
+install(FILES xdg/spotify-tray.desktop DESTINATION share/applications)
+install(FILES xdg/spotify-tray.svg DESTINATION share/icons/hicolor/scalable/apps)
