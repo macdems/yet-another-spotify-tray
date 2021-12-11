@@ -38,9 +38,19 @@ WindowData startSpotify(const QStringList& args) {
 }
 
 int main(int argc, char** argv) {
+    QSharedMemory mutex("yet-another-spotify-tray");
+
+    if (!mutex.create(1)) {
+        auto error = mutex.error();
+        if (error == QSharedMemory::AlreadyExists) {
+            qCritical("Spotify Tray is already running");
+            return 100;
+        }
+    }
+
     if (getSpotifyWindow()) {
         qCritical("Spotify is already running");
-        return 1001;
+        return 101;
     }
 
     QApplication app(argc, argv);
@@ -51,7 +61,7 @@ int main(int argc, char** argv) {
     MainWindow* main_window = new MainWindow();
 
     WindowData spotify = startSpotify(app.arguments());
-    if (!spotify) return 1002;
+    if (!spotify) return 102;
     qDebug("Spotify PID: %lu", spotify.pid);
 
     QWindow* spotify_window = QWindow::fromWinId(spotify.wid);
@@ -65,6 +75,8 @@ int main(int argc, char** argv) {
     main_window->setCentralWidget(widget);
 
     int exitcode = app.exec();
+
+    mutex.detach();
 
     delete main_window;
     return exitcode;
