@@ -1,6 +1,3 @@
-[submodule "singleapplication"]
-	path = singleapplication
-	url = git@github.com:itay-grudev/SingleApplication.git
 [submodule "src/third-party/singleapplication"]
 	path = src/third-party/singleapplication
 	url = git@github.com:itay-grudev/SingleApplication.git
