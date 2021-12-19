@@ -3,6 +3,8 @@
 #include <QtWidgets>
 #include <stdexcept>
 
+#include <singleapplication.h>
+
 #include "mainwindow.hpp"
 #include "winctl.hpp"
 
@@ -38,22 +40,12 @@ WindowData startSpotify(const QStringList& args) {
 }
 
 int main(int argc, char** argv) {
-    QSharedMemory mutex("yet-another-spotify-tray");
-
-    if (!mutex.create(1)) {
-        auto error = mutex.error();
-        if (error == QSharedMemory::AlreadyExists) {
-            qCritical("Spotify Tray is already running");
-            return 100;
-        }
-    }
-
     if (getSpotifyWindow()) {
         qCritical("Spotify is already running");
         return 101;
     }
 
-    QApplication app(argc, argv);
+    SingleApplication app(argc, argv);
 
     QTranslator translator;
     if (translator.load(QLocale::system().name(), ":/translations")) app.installTranslator(&translator);
@@ -75,8 +67,6 @@ int main(int argc, char** argv) {
     main_window->setCentralWidget(widget);
 
     int exitcode = app.exec();
-
-    mutex.detach();
 
     delete main_window;
     return exitcode;

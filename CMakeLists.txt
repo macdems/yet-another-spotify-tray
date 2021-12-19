@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(yet-another-spotify-tray VERSION 1.2.0 LANGUAGES CXX)
 
+set(QAPPLICATION_CLASS QApplication)
+add_subdirectory(src/third-party/singleapplication SingleApplication)
+
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -28,7 +32,7 @@ add_executable(spotify-tray
     ${translations}
 )
 
-target_link_libraries(spotify-tray Qt5::Widgets Qt5::DBus ${X11_LIBRARIES})
+target_link_libraries(spotify-tray Qt5::Widgets Qt5::DBus ${X11_LIBRARIES} SingleApplication::SingleApplication)
 
 install(TARGETS spotify-tray DESTINATION bin)
 install(FILES xdg/spotify-tray.desktop DESTINATION share/applications)
