@@ -18,6 +18,9 @@ QProcess spotifyProcess;
 // Spotify window data
 WindowData spotify;
 
+// Shared mutex to prevent running the app twice
+QSharedMemory mutex("yet-another-spotify-tray");
+
 // Try to get Spotify window, trying to
 // spawn a new process using the args if the window is not found
 // at the first attempt.
@@ -42,8 +45,10 @@ WindowData startSpotify(const QStringList& args) {
 }
 
 void stopSpotify() {
-    if (spotifyProcess.state() != QProcess::NotRunning) spotifyProcess.terminate();
-    else kill(spotify.pid, SIGTERM);
+    if (spotifyProcess.state() != QProcess::NotRunning)
+        spotifyProcess.terminate();
+    else
+        kill(spotify.pid, SIGTERM);
     usleep(2e5);  // 0.2 sec
 }
 
@@ -56,12 +61,12 @@ void sigHandler(int signal) {
         case SIGKILL:
         case SIGTERM:
             stopSpotify();
+            mutex.detach();
             exit(128 + signal);
     }
 }
 
 int main(int argc, char** argv) {
-    QSharedMemory mutex("yet-another-spotify-tray");
     unsigned long pid = 0;
     if (mutex.attach() && mutex.lock()) {
         pid = *reinterpret_cast<unsigned long*>(mutex.data());
@@ -103,6 +108,7 @@ int main(int argc, char** argv) {
     }
 
     signal(SIGTERM, sigHandler);
+    signal(SIGINT, sigHandler);
 
     QWindow* spotify_window = QWindow::fromWinId(spotify.wid);
 
@@ -117,7 +123,6 @@ int main(int argc, char** argv) {
     int exitcode = app.exec();
 
     stopSpotify();
-
     mutex.detach();
 
     delete main_window;
