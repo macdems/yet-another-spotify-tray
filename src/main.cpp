@@ -39,14 +39,29 @@ WindowData startSpotify(const QStringList& args) {
 
 int main(int argc, char** argv) {
     QSharedMemory mutex("yet-another-spotify-tray");
-
-    if (!mutex.create(1)) {
+    unsigned long pid = 0;
+    if (mutex.attach() && mutex.lock()) {
+        pid = *reinterpret_cast<unsigned long*>(mutex.data());
+        mutex.unlock();
+    }
+    mutex.detach();
+    if (mutex.create(sizeof(unsigned long))) {
+        pid = getpid();
+        if (mutex.lock()) {
+            *reinterpret_cast<unsigned long*>(mutex.data()) = pid;
+            mutex.unlock();
+        }
+    } else {
         auto error = mutex.error();
         if (error == QSharedMemory::AlreadyExists) {
-            qCritical("Spotify Tray is already running");
+            if (pid != 0)
+                qCritical("Spotify Tray is already running (PID %lu)", pid);
+            else
+                qCritical("Spotify Tray is already running");
             return 100;
         }
     }
+    qDebug("Tray PID: %lu", pid);
 
     if (getSpotifyWindow()) {
         qCritical("Spotify is already running");
