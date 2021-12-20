@@ -15,6 +15,9 @@
 // Spotify process handle
 QProcess spotifyProcess;
 
+// Spotify window data
+WindowData spotify;
+
 // Try to get Spotify window, trying to
 // spawn a new process using the args if the window is not found
 // at the first attempt.
@@ -38,6 +41,12 @@ WindowData startSpotify(const QStringList& args) {
     return WindowData();
 }
 
+void stopSpotify() {
+    if (spotifyProcess.state() != QProcess::NotRunning) spotifyProcess.terminate();
+    else kill(spotify.pid, SIGTERM);
+    usleep(2e5);  // 0.2 sec
+}
+
 // Try to kill Spotify process if got SIGTERM
 void sigHandler(int signal) {
     switch (signal) {
@@ -46,7 +55,7 @@ void sigHandler(int signal) {
         case SIGQUIT:
         case SIGKILL:
         case SIGTERM:
-            if (spotifyProcess.state() != QProcess::NotRunning) spotifyProcess.terminate();
+            stopSpotify();
             exit(128 + signal);
     }
 }
@@ -72,15 +81,11 @@ int main(int argc, char** argv) {
                 qCritical("Spotify Tray is already running (PID %lu)", pid);
             else
                 qCritical("Spotify Tray is already running");
-            return 100;
+            return 1;
         }
     }
-    qDebug("Tray PID: %lu", pid);
 
-    if (getSpotifyWindow()) {
-        qCritical("Spotify is already running");
-        return 101;
-    }
+    qDebug("Starting Spotify Tray (PID %lu)", pid);
 
     QApplication app(argc, argv);
 
@@ -89,9 +94,13 @@ int main(int argc, char** argv) {
 
     MainWindow* main_window = new MainWindow();
 
-    WindowData spotify = startSpotify(app.arguments());
-    if (!spotify) return 102;
-    qDebug("Spotify PID: %lu", spotify.pid);
+    if (spotify = getSpotifyWindow()) {
+        qDebug("Spotify is already running (PID %lu)", spotify.pid);
+    } else {
+        spotify = startSpotify(app.arguments());
+        if (!spotify) return 2;
+        qDebug("Starting Spotify (PID %lu)", spotify.pid);
+    }
 
     signal(SIGTERM, sigHandler);
 
@@ -106,6 +115,8 @@ int main(int argc, char** argv) {
     main_window->setCentralWidget(widget);
 
     int exitcode = app.exec();
+
+    stopSpotify();
 
     mutex.detach();
 
