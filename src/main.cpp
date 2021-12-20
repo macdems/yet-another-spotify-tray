@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <unistd.h>
 
 #include <QtWidgets>
@@ -35,6 +36,19 @@ WindowData startSpotify(const QStringList& args) {
         }
     }
     return WindowData();
+}
+
+// Try to kill Spotify process if got SIGTERM
+void sigHandler(int signal) {
+    switch (signal) {
+        case SIGINT:
+        case SIGABRT:
+        case SIGQUIT:
+        case SIGKILL:
+        case SIGTERM:
+            if (spotifyProcess.state() != QProcess::NotRunning) spotifyProcess.terminate();
+            exit(128 + signal);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -78,6 +92,8 @@ int main(int argc, char** argv) {
     WindowData spotify = startSpotify(app.arguments());
     if (!spotify) return 102;
     qDebug("Spotify PID: %lu", spotify.pid);
+
+    signal(SIGTERM, sigHandler);
 
     QWindow* spotify_window = QWindow::fromWinId(spotify.wid);
 
