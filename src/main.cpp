@@ -88,6 +88,7 @@ int main(int argc, char** argv) {
                 qCritical("Spotify Tray is already running");
             return 1;
         }
+        pid = getpid();
     }
 
     qDebug("Starting Spotify Tray (PID %lu)", pid);
