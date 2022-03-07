@@ -34,6 +34,25 @@ This application adds a tray icon to the Spotify Linux client application.
 * Xlib
 * CMake
 
+## Usage
+
+Just start Spotify *Music Player in System Tray* from the application menu. Alternatively you may star if from a command line as
+`spotify-tray`. Command-line arguments are passed directly to Spotify with the exception of `--show-window` <u>given as the first
+argument</u>, in which case the Spotify window is shown on startup.
+
+To have the window shown by default, edit the `spotify-tray.desktop` file and change the line
+
+```
+Exec=spotify-tray
+```
+
+to
+
+```
+Exec=spotify-tray --show-window
+```
+
+
 ## Disclaimer
 
 This software is in no way official and has nothing to do with the Spotify Technology S.A. company. Its only purpose is to add functionality missing in the official client.

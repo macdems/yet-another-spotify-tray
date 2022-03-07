@@ -93,6 +93,21 @@ int main(int argc, char** argv) {
 
     qDebug("Starting Spotify Tray (PID %lu)", pid);
 
+    bool show_window = false;
+
+    // This is not proper argument parsing, as in general arguments are passed to Spotify
+    while (argc > 1) {
+        if (!strcmp(argv[1], "--show-window")) {
+            show_window = true;
+            ++argv; --argc;
+        } else {
+            if (!strcmp(argv[1], "--")) {
+                ++argv; --argc;
+            }
+            break;
+        }
+    }
+
     QApplication app(argc, argv);
 
     QTranslator translator;
@@ -120,6 +135,8 @@ int main(int argc, char** argv) {
 
     QWidget* widget = QWidget::createWindowContainer(spotify_window, main_window, Qt::FramelessWindowHint);
     main_window->setCentralWidget(widget);
+
+    if (show_window) main_window->show();
 
     int exitcode = app.exec();
 
