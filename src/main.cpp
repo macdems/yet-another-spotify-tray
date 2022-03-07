@@ -24,7 +24,8 @@ QSharedMemory mutex("yet-another-spotify-tray");
 // Try to get Spotify window, trying to
 // spawn a new process using the args if the window is not found
 // at the first attempt.
-WindowData startSpotify(const QStringList& args) {
+WindowData startSpotify(QStringList args) {
+    args.takeFirst();
     spotifyProcess.start(DEFAULT_CLIENT_APP_PATH, args, QIODevice::ReadOnly);
 
     // App launched, it double forks; need to find the window and PID
@@ -99,10 +100,10 @@ int main(int argc, char** argv) {
     while (argc > 1) {
         if (!strcmp(argv[1], "--show-window")) {
             show_window = true;
-            ++argv; --argc;
+            argv[1] = argv[0]; ++argv; --argc;
         } else {
             if (!strcmp(argv[1], "--")) {
-                ++argv; --argc;
+                argv[1] = argv[0]; ++argv; --argc;
             }
             break;
         }
