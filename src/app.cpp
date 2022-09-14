@@ -28,6 +28,8 @@ SpotifyTrayApp::SpotifyTrayApp(int &argc, char **argv): QApplication(argc, argv)
     QTranslator translator;
     if (translator.load(QLocale::system().name(), ":/translations")) installTranslator(&translator);
 
+    connect(this, &QGuiApplication::commitDataRequest, this, &SpotifyTrayApp::commitData, Qt::DirectConnection);
+
     mainFrame = new SpotifyFrame();
 
     if (spotify = getSpotifyWindow()) {
@@ -85,4 +87,10 @@ void SpotifyTrayApp::stopSpotify() {
     else
         kill(spotify.pid, SIGTERM);
     usleep(2e5);  // 0.2 sec
+}
+
+void SpotifyTrayApp::commitData(QSessionManager& manager) {
+    QStringList args = {manager.restartCommand().first(), mainFrame->isVisible()? "--show" : "--hide", "--"};
+    args += spotifyArgs;
+    manager.setRestartCommand(args);
 }

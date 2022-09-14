@@ -25,6 +25,9 @@ class SpotifyTrayApp : public QApplication {
     // Main window pointer
     SpotifyFrame* mainFrame;
 
+  private slots:
+    void commitData(QSessionManager& manager);
+
   public:
     SpotifyTrayApp(int &argc, char **argv);
 
