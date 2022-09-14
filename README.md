@@ -37,10 +37,10 @@ This application adds a tray icon to the Spotify Linux client application.
 ## Usage
 
 Just start Spotify *Music Player in System Tray* from the application menu. Alternatively you may star if from a command line as
-`spotify-tray`. Command-line arguments are passed directly to Spotify with the exception of `--show-window` <u>given as the first
-argument</u>, in which case the Spotify window is shown on startup.
+`spotify-tray`. Command-line arguments are passed directly to Spotify with the exception of`--hide-window` <u>given as the first
+argument</u>, in which case the Spotify window is hidden at startup.
 
-To have the window shown by default, edit the `spotify-tray.desktop` file and change the line
+To have the window hidden by default, edit the `spotify-tray.desktop` file and change the line
 
 ```
 Exec=spotify-tray
@@ -49,9 +49,8 @@ Exec=spotify-tray
 to
 
 ```
-Exec=spotify-tray --show-window
+Exec=spotify-tray --hide-window
 ```
-
 
 ## Disclaimer
 

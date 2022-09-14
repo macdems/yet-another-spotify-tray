@@ -2,35 +2,35 @@
 #include <QtGui>
 #include <QtWidgets>
 
-#include "mainwindow.hpp"
+#include "window.hpp"
 
-MainWindow::MainWindow()
-    : dbus("org.mpris.MediaPlayer2.spotify",
-           "/org/mpris/MediaPlayer2",
-           "org.mpris.MediaPlayer2.Player",
-           QDBusConnection::sessionBus()) {
+SpotifyFrame::SpotifyFrame()
+    : mpris("org.mpris.MediaPlayer2.spotify",
+            "/org/mpris/MediaPlayer2",
+            "org.mpris.MediaPlayer2.Player",
+            QDBusConnection::sessionBus()) {
     setWindowTitle(tr("Spotify"));
 
     setWindowIcon(QIcon(":/icons/spotify-client.png"));
 
     trayIcon = new QSystemTrayIcon(QIcon(":/icons/spotify-intray.png"), this);
-    connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &SpotifyFrame::iconActivated);
 
     quitAction = new QAction(QIcon::fromTheme("application-exit"), tr("&Quit Spotify"), this);
     connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 
     prevAction = new QAction(QIcon::fromTheme("media-skip-backward"), tr("Pre&vious Track"), this);
-    connect(prevAction, &QAction::triggered, this, &MainWindow::prev);
+    connect(prevAction, &QAction::triggered, this, &SpotifyFrame::prev);
 
     nextAction = new QAction(QIcon::fromTheme("media-skip-forward"), tr("&Next Track"), this);
-    connect(nextAction, &QAction::triggered, this, &MainWindow::next);
+    connect(nextAction, &QAction::triggered, this, &SpotifyFrame::next);
 
     playAction = new QAction(QIcon::fromTheme("media-playback-start"), tr("P&lay"), this);
-    connect(playAction, &QAction::triggered, this, &MainWindow::play);
+    connect(playAction, &QAction::triggered, this, &SpotifyFrame::play);
 
     pauseAction = new QAction(QIcon::fromTheme("media-playback-pause"), tr("&Pause"), this);
     pauseAction->setVisible(false);
-    connect(pauseAction, &QAction::triggered, this, &MainWindow::pause);
+    connect(pauseAction, &QAction::triggered, this, &SpotifyFrame::pause);
 
     trayIconMenu = new QMenu(this);
     trayIconMenu->addAction(prevAction);
@@ -50,39 +50,42 @@ MainWindow::MainWindow()
     trayIcon->show();
 }
 
-void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
+void SpotifyFrame::activate() {
+    show();
+    raise();
+    activateWindow();
+}
+
+void SpotifyFrame::iconActivated(QSystemTrayIcon::ActivationReason reason) {
     switch (reason) {
         case QSystemTrayIcon::Trigger:
         case QSystemTrayIcon::DoubleClick:
-            if (isVisible()) {
+            if (isVisible())
                 hide();
-            } else {
-                show();
-                raise();
-                activateWindow();
-            }
+            else
+                activate();
             break;
         case QSystemTrayIcon::MiddleClick: break;
         default:;
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent* event) {
+void SpotifyFrame::closeEvent(QCloseEvent* event) {
     if (trayIcon->isVisible()) {
         hide();
         event->ignore();
     }
 }
 
-void MainWindow::prev() { dbus.call("Previous"); }
+void SpotifyFrame::prev() { mpris.call("Previous"); }
 
-void MainWindow::next() { dbus.call("Next"); }
+void SpotifyFrame::next() { mpris.call("Next"); }
 
-void MainWindow::play() { dbus.call("Play"); }
+void SpotifyFrame::play() { mpris.call("Play"); }
 
-void MainWindow::pause() { dbus.call("Pause"); }
+void SpotifyFrame::pause() { mpris.call("Pause"); }
 
-void MainWindow::dbusPropertiesChanged(const QString& name, const QVariantMap& properties, const QStringList&) {
+void SpotifyFrame::dbusPropertiesChanged(const QString& name, const QVariantMap& properties, const QStringList&) {
     if (name == "org.mpris.MediaPlayer2.Player") {
         if (properties.contains("PlaybackStatus")) {
             QString status = properties["PlaybackStatus"].toString();

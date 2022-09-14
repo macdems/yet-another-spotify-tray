@@ -1,11 +1,11 @@
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 
 #include <QtCore>
 #include <QtWidgets>
 #include <QtDBus/QtDBus>
 
-class MainWindow : public QMainWindow {
+class SpotifyFrame : public QMainWindow {
     Q_OBJECT
 
   private slots:
@@ -18,6 +18,9 @@ class MainWindow : public QMainWindow {
 
     void dbusPropertiesChanged(const QString& name, const QVariantMap& properties, const QStringList&);
 
+  public slots:
+    void activate();
+
   private:
     QAction* quitAction;
 
@@ -29,13 +32,13 @@ class MainWindow : public QMainWindow {
     QSystemTrayIcon* trayIcon;
     QMenu* trayIconMenu;
 
-    QDBusInterface dbus;
+    QDBusInterface mpris;
 
   protected:
     void closeEvent(QCloseEvent *event) override;
 
   public:
-    MainWindow();
+    SpotifyFrame();
 };
 
 #endif

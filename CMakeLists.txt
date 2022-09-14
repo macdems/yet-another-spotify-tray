@@ -21,7 +21,8 @@ file(COPY res/l10n.qrc DESTINATION ${CMAKE_BINARY_DIR}/)
 
 add_executable(spotify-tray
     src/main.cpp
-    src/mainwindow.cpp
+    src/app.cpp
+    src/window.cpp
     src/winctl.cpp
     res/icons.qrc
     ${CMAKE_BINARY_DIR}/l10n.qrc
