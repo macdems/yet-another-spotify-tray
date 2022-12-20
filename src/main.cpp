@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
         app = new SpotifyTrayApp(argc, argv);
         exitcode = app->exec();
     } catch (int e) {
-        return e;
+        exitcode = e;
     }
 
     mutex.detach();
